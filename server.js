@@ -5,6 +5,9 @@ const exphbs = require('express-handlebars');
 const product = require("./models/product");
 const bodyParser = require('body-parser');
 
+//Assignment 3 addition:
+const db = require("./db.js");
+
 //load environment variable file
 require('dotenv').config({path:"./config/keys.env"});
 
@@ -17,14 +20,16 @@ app.use(bodyParser.urlencoded({ extended: true})) //Added body parser to check f
 
 const PORT = process.env.PORT || 3000; //THIS IS FOR HEROKU
 
-
-
-app.listen(PORT, ()=>{
-    console.log("Web Server is up and running!") //will let us know if it even works
-}); 
-
-
-
+//Addition to Assignment 3
+db.initialize().then(()=>{
+  console.log("Data read successfully");
+  app.listen(PORT, () => {
+    console.log("Express http server listening on: " + PORT);	
+});	
+})
+.catch((data)=>{
+  console.log(data); //if it rejects, will pipe out the data 
+});
 
 app.get("/",(req,res)=>{
 
