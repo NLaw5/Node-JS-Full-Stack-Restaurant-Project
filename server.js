@@ -2,6 +2,7 @@
 //ID: 134543198
 //Github Link: https://github.com/NLaw5/WEB-322-Assignment-4-.git
 //Heroku Link: https://web322-a4-nlaw5.herokuapp.com/
+//Data Clerk User Account: username: FM@seneca.ca passsword: #654321
 const express = require("express");
 const app = express();
 const file = require("fs");
