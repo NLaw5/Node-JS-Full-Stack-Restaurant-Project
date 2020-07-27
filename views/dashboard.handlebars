@@ -1,0 +1,23 @@
+<h1>THIS IS A TEST FOR LOGIN REGISTRATION</h1>
+{{#each users}}
+<h1>First Name: {{firstName}}</h1>
+<h1>Last Name: {{lastName}}</h1>
+<h1>Email: {{Email}}</h1>
+{{#if role}}
+<h1>You are an Admin</h1>
+{{/if}}
+{{/each}}
+
+{{#if role}}
+<ul>
+    <li><a href="/orders">Orders</a></li>
+    <li><a href="/logout">Logout</a></li>
+</ul>
+{{else}}
+<ul>
+    <li><a href="/orders">Orders</a></li>
+    <li><a href="/addmp">Add Meal Plan</a></li>
+    <li><a href="/mp">View Meal Plans</a></li>
+    <li><a href="/logout">Logout</a></li>
+</ul>
+{{/if}}

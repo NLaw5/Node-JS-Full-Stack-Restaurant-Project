@@ -17,6 +17,17 @@ body
     
 }
 
+.img-fluid
+{
+    width: 50%;
+    border-radius: 50%;
+}
+
+.error-for-add
+{
+    text-align: center;
+    padding: 10px;
+}
 
 /* 
 .navigation-bar

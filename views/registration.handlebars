@@ -1,4 +1,11 @@
-
+{{#if successMessage}}
+    <h1>{{successMessage}}</h1>
+    <br>
+    <br>
+    <a href="/login">
+        Proceed to login
+    </a>
+{{else}}
     <div class = "form-container">
         <div class = "form">
                 <form class="login-form" action ="" method = "post">
@@ -18,4 +25,5 @@
                     <button type="submit" name="button">Register Now!</button>
                 </form>
         </div>
-    </div>   
+    </div> 
+{{/if}}  

@@ -1,0 +1,32 @@
+
+<div class = "form-container">
+    
+        <div class = "form">
+                <form class="login-form" action ="" method = "post">
+                    <h2>Edit Meal Package:</h2>
+                    <p>{{data.name}}</p>
+                    <br>
+                    <p>Price:</p>
+                    <input type="hidden" name= "name" value="{{data.name}}" placeholder="Name">
+                    <input type="text" name= "price" value="{{data.price}}" placeholder="Price">
+                    <p>Description:</p>
+                    <input type = "text" name="desc" value="{{data.desc}}" placeholder="Desc">
+                    <p>Food Category:</p>
+                    <input type="text" name="category" value="{{data.category}}" placeholder="Food Category">
+                    <p>Quantity:</p>
+                    <input type="text" name = "Quantity" value="{{data.Quantity}}" placeholder="Quantity">
+                    <p>Top Meal: </p>
+                    {{#if topMeal}}
+                        <input type="checkbox"  name="topMeal" />
+                    {{else}}
+                        <input type="checkbox"  name="topMeal" checked/>
+                    {{/if}}
+                    <p>Uploaded Photo: </p>
+                    <img class="img-fluid" src="/img/{{data.img}}" alt="Image for {{data.name}}"> 
+                    {{#each errorsMessages}}
+                        <div class="login-errors">{{this}}</div>
+                    {{/each}}
+                    <button type="submit" name="button">Edit</button>
+                </form>
+        </div>  
+</div>  
