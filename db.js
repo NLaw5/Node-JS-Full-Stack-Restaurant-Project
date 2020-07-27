@@ -94,8 +94,8 @@ module.exports.registerUser = function(body)
             const {firstName, lastName, Email, Password} = body;
             
             const sgMail = require('@sendgrid/mail');
-            sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
-            //sgMail.setApiKey("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");
+            //sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+            sgMail.setApiKey("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");
             const msg = {
                 to: `${Email}`,
                 from: "newn.law123@gmail.com",
