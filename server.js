@@ -170,7 +170,6 @@ function ensureLogin(req, res, next){ //our helper middleware function
 }
 
 function ensureAdmin(req, res, next) {
-    checkAdmin(req.session.user);
     if (!req.session.user || req.session.user[0].role!=true) { 
         res.render("dashboard", {
             users: req.session.user,
