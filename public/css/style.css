@@ -4,6 +4,43 @@ body
     margin: 0;
 }
 
+.mp-container
+{
+    padding-bottom: 30px;
+}
+
+.mp-grid-container
+{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 2em;
+    grid-gap: 3em;
+    grid-auto-rows: 500px;
+    font-family: 'Work Sans', sans-serif
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 10em;
+    grid-gap: 10em;
+    grid-auto-rows: 500px;
+    font-family: 'Work Sans', sans-serif
+}
+
+.mp-grid-container > div {
+
+    text-align: center
+}
+
+.mp-grid-container > div:nth-child(odd)
+{
+    text-align: center
+}
+
+
+
+
 .logo
 {
     width: 100px;
@@ -21,6 +58,7 @@ body
 {
     width: 50%;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .error-for-add
@@ -494,10 +532,20 @@ nav a:before {
 
 .mptop1 img
 {
-    width: 150px;
+    width: 50%;
     height: 150px;
     object-fit: cover;
     border-radius: 50%;
+}
+
+
+.mptop2 img
+{
+    width: 50%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    padding-top: 50px;
 }
 
 .login-errors

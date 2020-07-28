@@ -92,10 +92,18 @@ app.get("/",(req,res)=>{
 
 
 app.get("/listings",(req,res)=>{
-    res.render("listings", {
-        title : "Listings",
-        data : product.getAllMealPackages()
-    })
+    // res.render("listings", {
+    //     title : "Listings",
+    //     data : product.getAllMealPackages()
+    // })
+
+    db.getMealPackages().then((mealpackages)=>{
+        res.render("listings",{
+            title : "Listings",
+            data: (mealpackages.length!=0)?mealpackages:undefined});
+      }).catch((err)=>{
+        res.render("listings"); //add an error message or something
+    });
 })
 
 app.get("/registration",(req,res)=>{
@@ -111,10 +119,6 @@ app.get("/login",(req,res)=>{
 })
 
 //Assignment 3 Additions
-
-let loggedIn;
-let tempUser;
-
 app.post("/login", (req,res) => {
     db.checkUser(req.body).then((data) =>{
         req.session.user = data; //should only be data but if it doesn't work, try data[0]
@@ -166,16 +170,20 @@ function ensureLogin(req, res, next){ //our helper middleware function
 }
 
 function ensureAdmin(req, res, next) {
-    if (!req.session.user && req.session.user.role!= true) //in future, if I was to do it I would put role as boolean, future as in A4+
-    {
-        console.log(req.session.user.role);
-        res.redirect("/login");
-    }
-    else
-    {
-        next();
+    checkAdmin(req.session.user);
+    if (!req.session.user || req.session.user[0].role!=true) { 
+        res.render("dashboard", {
+            users: req.session.user,
+            errors: "You do not have Admin access to that page"
+        }
+      );
+    } else {
+      next();
     }
 }
+
+
+
 
 app.get("/logout", ensureLogin, (req, res) => {
     req.session.reset();
@@ -243,7 +251,7 @@ app.get("/edit", ensureLogin, ensureAdmin, (req,res)=>{
       });
     }
     else
-      res.redirect("/mp");
+      res.redirect("/dashboard");
 });
   
 app.post("/edit", (req,res) =>{
@@ -252,7 +260,11 @@ app.post("/edit", (req,res) =>{
         res.redirect("/mp");
     }).catch((err)=>{
         console.log("Error updating package: " + err);
-        res.render("/mp"); //add error message in A5 or A4 I guess
+        res.render("editmp", {
+            errorsMessages: err,
+            data:req.body
+        }
+        ); //add error message in A5 or A4 I guess
     })
 })
 

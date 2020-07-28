@@ -1,14 +1,20 @@
 
+<h1>Here's a listing of all our available Meal Packages on sale!</h1>
+
 <div class ="Listings_Main_Content">
     <div class = "grid-container">
         {{#each data}}
         <div>
             <div class="mptop1">
-                <img src="/img/{{this.Image}}">
+                <img src="/img/{{img}}">
             </div>
-            <h1 class="mptitle1">{{this.Name}}</h1>
-            <p class="mpdesc1"> {{this.Desc}}
-            </p>
+            <h1 class="mptitle1">{{name}}</h1>
+            <p class="mpdesc1"> {{desc}}</p>
+            <p class="mpdesc1"> Price: {{price}}</p>
+        </div>
+        {{else}}
+        <div>
+            <h1>No Meal Packages found!</h1>
         </div>
         {{/each}}
     </div>

@@ -13,7 +13,8 @@ let registerUser = new Schema({
     Password: {
         type: String,
         unique: true,
-    }
+    },
+    role: Boolean
 });
 
 let mp = new Schema({
@@ -56,7 +57,7 @@ module.exports.initialize = function(){ //all our connection is moved to our ini
 module.exports.registerUser = function(body)
 {
     return new Promise((resolve,reject)=>{ 
-
+        
         const errors = [];
 
         let check_length;
@@ -107,11 +108,7 @@ module.exports.registerUser = function(body)
             sgMail.send(msg)
             .then(()=>{
                 //res.redirect("/") 
-                res.render("home", {
-                    title : "Home",
-                    data : product.getAllProducts(),
-                    send: Email,
-                })
+                console.log("Email sent!");
             })
             .catch(err=>{
                 console.log(`Error ${err}`);
@@ -131,6 +128,9 @@ module.exports.registerUser = function(body)
             //NOTE: only works if the field names are the same. "Name" vs "name" doesn't work
             //Ex. if the Name in our form is "Name" but our schema is "name", won't work
             let newUser = new Users(body); //copy constructor
+
+            newUser.role = false; //Assignment 4 addition: SETS ALL NEW USERS BY DEFAULT TO FALSE
+            
             bcrypt.genSalt(10) //Generate a "salt" using 10 rounds
             .then(salt=>bcrypt.hash(newUser.Password,salt)) //use the generated "salt" to encrypt the password
             .then(hash=> { //returns encrypted password
@@ -210,6 +210,38 @@ module.exports.checkUser = (userData) => {
 
 module.exports.addMealPackage = (userData) => {
     return new Promise((resolve, reject) => {
+        const errors = [];
+
+        if(userData.name=="")
+        {
+            errors.push("You must enter a name for Meal Package")
+        }
+    
+        if(userData.price=="")
+        {
+            errors.push("You must enter a price for Meal Package")
+        }
+    
+        if(userData.desc == "")
+        {
+            errors.push("You must enter a description for Meal Package")
+        }
+
+        if(userData.category == "")
+        {
+            errors.push("You must enter a category for Meal Package")
+        }
+
+        if(userData.Quantity == "")
+        {
+            errors.push("You must enter a quantity for Meal Package")
+        }
+    
+        if(errors.length > 0)
+        {
+            console.log("Form Validation for adding a meal package is incorrect");
+            reject(errors);
+        }
 
         for (var formEntry in userData){
             if (userData[formEntry] == "") 
@@ -273,6 +305,39 @@ module.exports.getMealPackagesforEdit = function(inName){
 
 module.exports.editMealPackage = (editData) => {
     return new Promise((resolve, reject) => {
+
+        const errors = [];
+        if(editData.name=="")
+        {
+            errors.push("You must enter a name for Meal Package")
+        }
+    
+        if(editData.price=="")
+        {
+            errors.push("You must enter a price for Meal Package")
+        }
+    
+        if(editData.desc == "")
+        {
+            errors.push("You must enter a description for Meal Package")
+        }
+
+        if(editData.category == "")
+        {
+            errors.push("You must enter a category for Meal Package")
+        }
+
+        if(editData.Quantity == "")
+        {
+            errors.push("You must enter a quantity for Meal Package")
+        }
+    
+        if(errors.length > 0)
+        {
+            console.log("Form Validation for Edit incorrect");
+            reject(errors);
+        }
+
         editData.topMeal = (editData.topMeal)? true: false;
 
         console.log("Testing editData:");

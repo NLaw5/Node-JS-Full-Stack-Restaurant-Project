@@ -23,6 +23,7 @@
                     {{/if}}
                     <p>Uploaded Photo: </p>
                     <img class="img-fluid" src="/img/{{data.img}}" alt="Image for {{data.name}}"> 
+                    <input type="hidden" name= "img" value="{{data.img}}" placeholder="Image for req.body">
                     {{#each errorsMessages}}
                         <div class="login-errors">{{this}}</div>
                     {{/each}}

@@ -1,22 +1,24 @@
-<h1> This is a test for Orders.handlebars</h1>
+<h1> This is a test for MP.handlebars</h1>
 
-<h1> you can only access this if you are a logged in user, protected see javascript code for function</h1>
-
+<h1> You can only access this if you are a logged in user, protected see javascript code for function</h1>
 <ul>
-    <li><a href="/dashboard">Dashboard</a></li>
-    <li><a href="/orders"> Orders</li>
+    <li><a href="/addmp">Add Meal Plan</a></li>
+    <li><a href="/mp">View Meal Plans</a></li>
     <li><a href="/logout">Logout</a></li>
 </ul>
 
-<h1>Meal Packages </h1>
 
+<h1>Meal Packages</h1>
+<h1>(Would rather have the test for deleting meal packages not be the first five meal packages if possible) </h1>
 <div class="mp-container">
      
-        <div class="grid-container">
+        <div class="mp-grid-container">
             {{#each mealpackage}}
             <div>
-                <img class="img-fluid" src="/img/{{img}}" alt="Image for {{name}}"> 
-                <p>Meal Package Name: {{name}}</p>
+                <div class="mptop2">
+                    <img src="/img/{{img}}">
+                </div>
+                <h1>{{name}}</h1>
                 <p>Meal Package Price: {{price}}</p>
                 <p>Description: {{desc}}</p>
                 <p>Meal Package Food Cateogry: {{category}}</p>
