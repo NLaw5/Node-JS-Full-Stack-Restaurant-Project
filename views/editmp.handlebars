@@ -16,10 +16,10 @@
                     <p>Quantity:</p>
                     <input type="text" name = "Quantity" value="{{data.Quantity}}" placeholder="Quantity">
                     <p>Top Meal: </p>
-                    {{#if topMeal}}
-                        <input type="checkbox"  name="topMeal" />
-                    {{else}}
+                    {{#if data.topMeal}}
                         <input type="checkbox"  name="topMeal" checked/>
+                    {{else}}
+                        <input type="checkbox"  name="topMeal"/>
                     {{/if}}
                     <p>Uploaded Photo: </p>
                     <img class="img-fluid" src="/img/{{data.img}}" alt="Image for {{data.name}}"> 

@@ -241,6 +241,7 @@ app.post("/addmp", upload.single("photo"), (req,res) => {
 app.get("/edit", ensureLogin, ensureAdmin, (req,res)=>{
     if (req.query.name){ //checks if there is name 
       db.getMealPackagesforEdit(req.query.name).then((users)=>{
+        console.log(users[0]);
         res.render("editmp", {
             data: users[0]
         }); //using [0] because students is an array
