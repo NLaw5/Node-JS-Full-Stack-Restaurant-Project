@@ -13,18 +13,47 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
     <script>
-            function makeAJAXRequest(method, url, data){ //data is optional, if we do add data will be a post or put method 
+            function makeAJAXRequest(method, url, data){
                 if(data){ // Make an AJAX call using the provided data & method
                     console.log("Adding: "+data.name);
-                    fetch(url, { //fetch from the URL the method, body --> turns the object to a string of data that is a JSON, and header 
+                    fetch(url, { 
                         method: method,
                         body: JSON.stringify(data),
                         headers: { 'Content-Type': 'application/json'} 
                     })
                     .then(response => response.json())
-                    .then(json => {//responds with number of items in cart 
-                        //changes the number beside the cart
-                        $("span.glyphicon").text(`${json.data}`); //since it only replied with numbers in our cart
+                    .then(json => {//responds with number of items in cart
+                        $(".total").text(`Total: ${json.data.total}`);
+                        $("#list").empty();//emptys old container
+                        var htmlStr =""; //creates a empty html string to add to list div
+                        
+                        //Populates HTML string. This prints each item to screen. 
+                        (json.data.cart).forEach(x=>{ 
+                            htmlStr += '<div class="row">';
+                            htmlStr += '<div class="col-md-3">';
+                            htmlStr += '<img class="topmp2" src="/img/'+x.img+'" alt="'+x.name+'">';
+                            htmlStr += '</div><div class="col-md-3">';
+                            htmlStr += '<h1>'+x.name+'</h1>';
+                            htmlStr += '<h2>Category:  </h2>';
+                            htmlStr += '<h3>' +x.category+'</h3>';
+                            htmlStr += '<p> Description: '+x.desc+'</p></div>';
+                            htmlStr += '<div class="col-md-3">';
+                            htmlStr += ' <h4>$'+x.price+'</h4>';
+                            htmlStr += '</div><div class="col-md-3">';
+                            htmlStr += `<button  type="button" onclick='removeFromCart("${x.name}")'>Remove from Cart</button>`;
+                            htmlStr += '</div></div><hr>';   
+                        });
+                        if(json.data.cart.length > 0)
+                        {
+                            htmlStr += `<a href="/orderFinished"><button  type="button">Checkout</button></a></div>`;
+                        }
+                        else
+                        {
+                            htmlStr += `<a href="/orders"><button  type="button">Go Back to Orders</button></a></div>`;
+                        }
+                        
+                        //sets the HTML inside "list" div
+                        $("#list").html(htmlStr); //NOTE: remember that list was empty just before the forEach
                     }).catch((err)=>{
                         console.log("Error Fetching");
                         alert(err.message);
@@ -40,13 +69,12 @@
                     });
                 }
             }
-            //makes ajax call to add a certain item by name to cart
-            function addToCart(data){
+            //makes ajax call to remove a certain item by name
+            function removeFromCart(data){
                 console.log("Calling add with: "+data);
-                 makeAJAXRequest("POST", "/addProduct", {name: data});
+                 makeAJAXRequest("POST", "/removeItem", {name: data});
             }
-
-        </script>    
+        </script>   
 
     <style >
             img
@@ -104,44 +132,46 @@
                 <h2>Price</h2>
             </div>
             <div class="col-md-3">
-                <!-- Add the shopping cart glyphicon -->
-               <a href="/cart"><span class="glyphicon glyphicon-shopping-cart"></span></a> 
+                <h2 class="total" style="color: red;">Total: ${{data.total}}</h2>
             </div>
         </div>
         <hr>
-        {{#each data}}
-        <div class="row">
-            <div class="col-md-3">
-                <img class="mptop2" src="/img/{{img}}" alt="{{name}}">
+        <div id="list">
+        {{#each data.cart}}
+            <div class="row">
+                <div class="col-md-3">
+                    <img class="mptop2" src="/img/{{img}}" alt="{{name}}">
+                </div>
+                <div class="col-md-3">
+                    <h1>{{name}}</h1>
+                    <h2>Category: </h2>
+                    <h2>{{category}}</h2>
+                    <p>Description: {{desc}}</p>
+                </div>
+                <div class="col-md-3">
+                    <h4>${{price}}</h4>
+                </div>
+                <div class="col-md-3">
+                    <!--Add a button to call our ajax functions-->
+                    <button  type="button" onclick='removeFromCart("{{name}}")'>Remove from Cart</button>
+                </div>
             </div>
-            <div class="col-md-3">
-                <h1>{{name}}</h1>
-                <h2>Category: </h2>
-                <h3>{{category}}</h3>
-                <p>Description: {{desc}}</p>
-                <p>Quantity: {{Quantity}}</p>
-                {{#if topMeal}}
-                    <div>This is a topMeal</div>
-                {{else}}
-                    <div>This is not a topMeal</div>
-                {{/if}}
-            </div>
-            <div class="col-md-3">
-                <h1>${{price}}</h1>
-            </div>
-            <div class="col-md-3">
-                <!-- Creates add to cart button -->
-                <button  type="button" name="button" onclick='addToCart("{{name}}")'>Add to Cart</button>
-            </div>
-        </div>
         <hr>
+        {{else}}
+            <div class="row">
+                <div><h3>Cart is Empty</h3></div>
+            </div>
+            <a href="/orders"><button  type="button">Go Back to Orders</button></a></div>
         {{/each}}
-         <div class="col-md-3">
-            <a href="/cart"><button  type="button">Go to Cart</button></a></div>
+        {{#if data.cart}}
+        <a href="/orderFinished"><button  type="button">Checkout</button></a>
+        {{/if}}
+
         </div>
-        <Br>
-        </div>
+        <hr>
         
+        </div>
+
 
 
 <!-- END OF ADDITION FOR BODY -->

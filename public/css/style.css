@@ -273,14 +273,21 @@ nav a:before {
 }
 
 
+.glyphicon
+{
+    color: red;
+}
+
+.glyphicon:hover{
+    opacity: 0.65;
+}
 
 
-
-.container
+/* .container
 {
     width: 80%;
     margin: 0 auto;
-}
+} */
 
 
 .hero
@@ -348,12 +355,22 @@ nav a:before {
     grid-template-columns: repeat(4, 1fr);
     padding: 2em;
     grid-gap: 3em;
-    grid-auto-rows: 300px;
-    font-family: 'Work Sans', sans-serif
+    grid-auto-rows: 400px;
+    font-family: 'Work Sans', sans-serif;
+    width: 100%;
+    
+    /* height: 100%; */
 }
 
-.grid-container > div {
+/* .Listings_Main_Content
+{
+    height: 100vh;
+} */
 
+
+
+.grid-container > div {
+    /* height: 100%; */
     text-align: center
 }
 
@@ -489,6 +506,51 @@ nav a:before {
     color: white;
 }
 
+
+button {
+    outline: 0;
+    background: none;
+    color: red;
+    font-size: 14px;
+    text-transform: uppercase;
+    width: 150px;
+    padding: 15px;
+    border: 2.5px solid red;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.5s;
+    transition-property: background, transform, color;
+    margin-top: 10px;
+}
+
+button:hover, button:active, button:focus {
+    background: red;
+    transform: scale(1.1);
+    color: white;
+}
+
+.thefinalOrder
+{
+    text-align: center;
+    border-bottom: 0.5px  solid grey;
+}
+
+.thefinalOrderH1
+{
+    text-decoration: underline;
+}
+
+.thefinalOrderH1-2
+{
+    text-decoration: underline;
+    color: red;
+}
+
+.congratulate-user
+{
+    text-align: center;
+}
+
 .form .login-options {
     color: black;
     font-size: 14px;
@@ -555,7 +617,39 @@ nav a:before {
     text-decoration: underline;
 }
 
+.grey-container
+{
+    /* background-color: whitesmoke; */
+    width: 100%;
+    text-align: center;
+    height: 100%;
+}
 
+.grey-container > .container 
+{
+    grid-auto-rows: 800px;
+}
+
+.linkinButton
+{
+    color: red;
+}
+.dashboard-user{
+    background: whitesmoke;
+    z-index: 1;
+    font-family: Arial, Helvetica, sans-serif;
+
+
+    padding: 10em;
+    text-align: center;
+    border-radius: 10px;
+    opacity: 0.9;
+}
+
+.dashboard-user > p
+{
+    color: red;
+}
 .footer {
     width: 100%;
     background: white;
@@ -642,7 +736,7 @@ nav a:before {
         grid-template-columns: repeat(1, 1fr);
         padding: 2em;
         grid-gap: 3em;
-        grid-auto-rows: 300px;
+        grid-auto-rows: 500px;
         font-family: 'Work Sans', sans-serif
     }
 }

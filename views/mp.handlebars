@@ -19,14 +19,14 @@
                     <img src="/img/{{img}}">
                 </div>
                 <h1>{{name}}</h1>
-                <p>Meal Package Price: {{price}}</p>
+                <p>Meal Package Price: ${{price}}</p>
                 <p>Description: {{desc}}</p>
                 <p>Meal Package Food Cateogry: {{category}}</p>
                 <p>Number of meals inside package: {{Quantity}}</p>
                 {{#if topMeal}}
-                    <div class="col-md-2">This is a topMeal</div>
+                    <div>This is a topMeal</div>
                 {{else}}
-                    <div class="col-md-2">This is not a topMeal</div>
+                    <div>This is not a topMeal</div>
                 {{/if}}
                 <div class=" col-md-1">
                     <a href="/edit?name={{name}}" class="btn btn-primary">Edit</a>

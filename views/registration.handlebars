@@ -1,10 +1,14 @@
 {{#if successMessage}}
-    <h1>{{successMessage}}</h1>
-    <br>
-    <br>
-    <a href="/login">
-        Proceed to login
-    </a>
+    <div class = "congratulate-user"> 
+        <h1>{{successMessage}}</h1>
+        <br>
+        <br>
+        <h1>
+            <a href="/login">
+                Proceed to login
+            </a>
+        </h1>
+    </div>
 {{else}}
     <div class = "form-container">
         <div class = "form">

@@ -19,7 +19,7 @@ let registerUser = new Schema({
 
 let mp = new Schema({
     name: String,
-    price: String,
+    price: Number,
     desc: String,
     category: String,
     Quantity: Number,
@@ -96,7 +96,7 @@ module.exports.registerUser = function(body)
             
             const sgMail = require('@sendgrid/mail');
             //sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
-            sgMail.setApiKey("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");
+            sgMail.setApiKey("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");
             const msg = {
                 to: `${Email}`,
                 from: "newn.law123@gmail.com",
@@ -211,6 +211,8 @@ module.exports.checkUser = (userData) => {
 module.exports.addMealPackage = (userData) => {
     return new Promise((resolve, reject) => {
         const errors = [];
+        console.log("Testing userData");
+        console.log(userData);
 
         if(userData.name=="")
         {
@@ -372,20 +374,19 @@ module.exports.editMealPackage = (editData) => {
 }
 
 module.exports.deleteMealPackage = (inputName) => {
-    setTimeout(function(){
+    return new Promise((resolve, reject) => {
         MealPackages.deleteOne({name: inputName})
     .exec()   //run as a promise
     .then(()=>{
-        //resolve();
-    }).catch(()=>{
-       //reject();  //maybe a problem communicating with server
+        resolve();
+    }).catch((err)=>{
+       reject(err);  //maybe a problem communicating with server
     });
     },2000);
 
 }
 
-module.exports.checkMealProducts = (userData) => {
-  
+module.exports.checkMealProducts = (userData) => {  
         console.log("Checking data being sent through");
         console.log(userData);
         if(userData.length > 0)
@@ -404,3 +405,27 @@ module.exports.checkMealProducts = (userData) => {
         }
 }
 
+//Change obviously
+module.exports.getMealPackgesforPayment = (inName)=>{
+    console.log("Get Item " + inName);
+    return new Promise((resolve, reject)=>{
+        //var item = MealPackages.filter(x=>x.name == inName);
+        MealPackages.find({name: inName}) //gets all and returns an array. Even if 1 or less entries
+        .exec() //tells mongoose that we should run this find as a promise.
+        .then((returnedMealPackages)=>{
+           let item = returnedMealPackages.map(item=>item.toObject());
+           if (item.length > 0 ){
+            console.log("Got Item: "+ JSON.stringify(item[0]));
+            resolve(item[0]);
+            }
+            else{
+                reject("Couldn't find Item");
+            }
+        }).catch((err)=>{
+                console.log("Error Retriving Meal Package:"+err);
+                reject(err);
+        });
+
+        
+    });
+}

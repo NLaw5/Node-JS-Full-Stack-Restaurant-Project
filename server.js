@@ -1,7 +1,7 @@
 //Newman Law
 //ID: 134543198
-//Github Link: https://github.com/NLaw5/WEB-322-Assignment-4-.git
-//Heroku Link: https://web322-a4-nlaw5.herokuapp.com/
+//Github Link: 
+//Heroku Link: 
 //Data Clerk User Account: username: FM@seneca.ca passsword: #654321
 const express = require("express");
 const app = express();
@@ -10,8 +10,11 @@ const path = require("path");
 const exphbs = require('express-handlebars');
 const product = require("./models/product");
 const bodyParser = require('body-parser');
+//Assignment 3 addition:
+const db = require("./db.js");
 const clientSessions = require("client-sessions"); //Assignment 4 addition, should be A3 but prof allowed us to use local variable
 const multer = require("multer"); //Assignment 4 addition
+const cart = require("./cart.js");
 
 //Setup client-sesions
 app.use(clientSessions({
@@ -40,8 +43,7 @@ const imageFilter = (req, file, cb) => {
   
 const upload = multer({ storage: storage, fileFilter: imageFilter });
 
-//Assignment 3 addition:
-const db = require("./db.js");
+
 
 //load environment variable file
 require('dotenv').config({path:"./config/keys.env"});
@@ -52,6 +54,7 @@ app.set('view engine', 'handlebars');
 
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: true})) //Added body parser to check for form validation
+app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 3000; //THIS IS FOR HEROKU
 
@@ -71,11 +74,6 @@ db.initialize().then(()=>{
 
 
 app.get("/",(req,res)=>{
-    // res.render("home", {
-    //     title : "Home",
-    //     data : product.getAllProducts() //checks our values to determine if product check = true, then returns product
-    // })
-
     db.getMealPackages().then((dataTopMealPackages)=>{
             res.render("home",{
                 title : "Home",
@@ -92,11 +90,6 @@ app.get("/",(req,res)=>{
 
 
 app.get("/listings",(req,res)=>{
-    // res.render("listings", {
-    //     title : "Listings",
-    //     data : product.getAllMealPackages()
-    // })
-
     db.getMealPackages().then((mealpackages)=>{
         res.render("listings",{
             title : "Listings",
@@ -121,13 +114,10 @@ app.get("/login",(req,res)=>{
 //Assignment 3 Additions
 app.post("/login", (req,res) => {
     db.checkUser(req.body).then((data) =>{
-        req.session.user = data; //should only be data but if it doesn't work, try data[0]
-
-        //THIS IS not needed because we are using session now from Assignment 3+
-        // loggedIn = true;
-        // tempUser = data; //this is our temporary user info
+        req.session.user = data; 
         res.render("dashboard", {
-            users: req.session.user //not sure, check in case
+            users: req.session.user,
+            layout: false
         })
     }).catch(err => {
         res.render("login", {
@@ -182,27 +172,17 @@ function ensureAdmin(req, res, next) {
 }
 
 
-
-
 app.get("/logout", ensureLogin, (req, res) => {
+    cart.deleteCart(); //will empty our userCart variable when user Logs out
     req.session.reset();
-    //No need for these as Assignent 3+ we will be using session
-    // loggedIn = false; //resets loggedIn as false
-    // tempUser = ""; //resets tempUser and makes it hold nothing
     res.redirect("/login");
 });
 
-app.get("/orders", ensureLogin, (req,res) =>{
-    res.render("orders", {
-        title: "Orders",
-        successMessage: "User Succesfully Created"
-    })
-})
 
 app.get("/dashboard", ensureLogin, (req,res) =>
     res.render("dashboard", {
         title: "Dashboard",
-        users: req.session.user //A4: Change from local variable to sessions
+        users: req.session.user 
     })
 )
 
@@ -264,22 +244,126 @@ app.post("/edit", (req,res) =>{
             errorsMessages: err,
             data:req.body
         }
-        ); //add error message in A5 or A4 I guess
+        ); 
     })
 })
 
 app.get("/delete", ensureLogin, ensureAdmin, (req,res)=>{
     if (req.query.name){ //checks if there is name 
-        db.deleteMealPackage(req.query.name);
-        res.redirect("/dashboard"); 
+        db.deleteMealPackage(req.query.name).then(()=>{
+            res.redirect("/mp");
+        }).catch((err) =>{
+            console.log(err);
+            res.redirect("/dashboard"); 
+        })
     }
     else {
         console.log("No Query");
-        res.redirect("/dashboard"); //add error message in A5 or A4
+        res.redirect("/dashboard"); 
     }
     
 });
 
+//Assignment 5 Additions
+app.get("/orders", ensureLogin, (req,res) =>{
+    db.getMealPackages().then(packages=>{
+        res.render("orders", {
+            title: "Orders",
+            data: packages, layout: false});
+    }).catch(()=>{
+        res.send("Something went wrong with grabbing the package")
+    })
+})
+
+app.post("/addProduct", ensureLogin, (req,res)=>{
+    console.log("Adding prod with name: "+req.body.name);
+    db.getMealPackgesforPayment(req.body.name)
+    .then((item)=>{
+        cart.addItem(item) //cart is what was exported | const cart = require("./cart.js"); | store in variable called userCart in Cart.js
+        .then((numItems)=>{
+            res.json({data: numItems}); //this is sent back to product.hbs, specificlaly AJAX
+        }).catch(()=>{
+            res.json({message:"error adding"});
+        })
+    }).catch(()=>{
+        res.json({message: "No Items found"})
+    })
+});
+
+//Route to see cart and items
+app.get("/cart", ensureLogin, (req,res)=>{
+    var cartData = {
+        cart:[],
+        total:0
+    } ;
+    cart.getCart().then((items)=>{
+        cartData.cart = items;
+        cart.checkout().then((total)=>{
+            cartData.total = total;
+            console.log(cartData.total);
+            res.render("checkout", {data:cartData, layout:false}); //sending in cartData as Data; therefore, at checkout data = json.data.cart or json.data.total
+        }).catch((err)=>{
+            res.send("There was an error getting total: " +err);
+        });
+    })
+    .catch((err)=>{
+        res.send("There was an error: " + err );
+    });
+});
+
+
+//AJAX route to remove item by name. Replies back with total and list of items. 
+app.post("/removeItem", ensureLogin, (req,res)=>{ //return the cart to re-render the page
+    var cartData = {
+        cart:[],
+        total:0
+    } ;
+    cart.removeItem(req.body.name).then(cart.checkout) //cart.checkout is a function
+    .then((inTotal)=>{
+        cartData.total = inTotal; 
+        cart.getCart().then((items)=>{
+           cartData.cart = items; 
+           res.json({data: cartData}); //will contain both whats in the cartData as well as cart, note userCart in cart.js has everything
+        }).catch((err)=>{res.json({error:err});});
+    }).catch((err)=>{
+        res.json({error:err});
+    })
+});
+
+//final webpages of A5
+app.get("/orderFinished", ensureLogin, (req,res) =>{
+    var cartData = {
+        cart:[],
+        total:0
+    };
+    cart.getCart().then((items)=>{
+        cartData.cart = items;
+        cart.checkout().then((total)=>{
+            cartData.total = total;
+            console.log("Final checkout price: ")
+            console.log(cartData.total);
+
+            let finalCheckoutValues = [];
+            finalCheckoutValues = cart.finalCheckout(cartData, req.session.user); //will send an email
+            console.log("Final Checkout Values: ");
+            console.log(finalCheckoutValues);
+            cart.deleteCart(); //WILL DELETE ALL ORDERS FROM USERCART IN CART.JS
+            res.render("confirmedOrder", {
+                users: req.session.user,
+                data: finalCheckoutValues,
+                Total: cartData.total,
+                layout: false
+            }); //sending in cartData as Data; therefore, at checkout data = json.data.cart or json.data.total
+        }).catch((err)=>{
+            res.send("There was an error getting total: " +err);
+            res.render("checkout")
+        });
+    })
+    .catch((err)=>{
+        res.send("There was an error: " + err );
+        res.render("orders");
+    });
+})
 
 
 app.use((err, req, res, next) => {

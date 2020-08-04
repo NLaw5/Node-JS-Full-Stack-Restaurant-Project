@@ -1,20 +1,112 @@
-{{#each users}}
-<h1>Welcome: {{firstName}}</h1>
-<h1>Last Name: {{lastName}}</h1>
-<h1>Email: {{Email}}</h1>
-{{#if role}}
-<h1>You are an Admin</h1>
-<h1>Admin Privileges</h1>
-<ul>
-    <li><a href="/addmp">Add Meal Plan</a></li>
-    <li><a href="/mp">View Meal Plans</a></li>
-</ul>
-{{/if}}
-<ul>
-    <li><a href="/orders">Order</a></li>
-    <li><a href="/logout">Logout</a></li>
-</ul>
-{{/each}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/style.css" rel="stylesheet"  type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Work+Sans:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>{{{title}}}</title>
+</head>
+<body>
+ 
+    {{#each users}}
+        <div class="container">
+            <div class = "dashboard-user">
+                <h1>Welcome: {{firstName}} {{lastName}}</h1>
+                <h1>Email: {{Email}}</h1>
+                <h2>To buy meal packages, simply click "Orders" </h2>
+                {{#if role}}
+                <p>You are a Data Entry Clerk</p>
+                {{else}}
+                <p>You are not a Data Entry Clerk</p> 
+                {{/if}}
+            </div>
+            {{#if role}}
+                <div class = "grey-container">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <a href="/addmp" class = "linkinButton"><button  type="button">Add Meal Plan</button></a>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="/mp" class = "linkinButton"><button  type="button">Edit All Meal Plans</button></a>
+                        </div>    
+                {{/if}}
+                    <div class="col-md-2">
+                        <a href="/orders" class = "linkinButton"><button  type="button" class = "linkinButton">Orders</button></a>
+                    </div>
+                    <div class="col-md-2">
+                        <a><button  type="button"><a href="/cart" class = "linkinButton"> View your Cart</button></a>
+                    </div>
+                    <div class="col-md-2">
+                        <button  type="button" class = "linkinButton">Logout</button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    {{/each}}
 
-<h1>{{{errors}}}</h1>
+    <h1>{{{errors}}}</h1>
+
+    <div class="footer">
+        <div class="footer-content"> 
+          <div class="footer-section about">
+            <a id="bottom_of_page"></a>
+            <h1 class ="logo-text"><span>LiveFitFoods</span></h1>
+            <p>
+              LiveFitfood helps makes food deliveries affordable and easy! Our goal is to brings
+              a whole new way to eat. Our in-house chefs help create nourishing dishes that get delivered right to your door!
+            </p>
+            <div class="contact">
+              <span><i class="fa fa-phone">&nbsp; 855-905-4833</i></span>
+              <span><a href="mailto: hello@livefitfoods.ca" class="contact-email"><i class="fa fa-envelope"></i></a>&nbsp;hello@livefitfoods.ca</i></span>
+            </div>
+            <div class="socials">
+              <a href="https://www.facebook.com/livefitfood" target="_blank"><i class="fa fa-facebook"></i></a>
+              <a href="https://www.instagram.com/livefitfoods/" target="_blank"><i class="fa fa-instagram"></i></a>
+              <a href="https://www.instagram.com/livefitfoods/?hl=en" target="_blank"><i class="fa fa-twitter"></i></a>
+              <a href="#" target="_blank"><i class="fa fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-section links">
+            <h1>Other Food Delivery Apps</h1>
+            <div class="socials">
+              <a href="">Breakfast Menu</a>
+              <br>
+              <a href="">Lunch Menu</a>
+              <br>
+              <a href="">Dinner Menu</a>
+              <br>
+              <a href="">Kids Menu</a>
+            </div>
+          </div>
+      
+          <div class="footer-section contact-form">
+            <h1>Sign up for our Newsletter</h1>
+            <form action="https://formspree.io/myydokbn" method="post">
+              <input type="email" name="email" class="text-input contact-input" placeholder="Your email address..."><br><br>
+              <button type="submit" class="btn-big btn"> <i class="fa fa-envelope"></i> Subscribe</button>
+            </form>
+          </div>
+        </div>
+      
+        <div class="footer-bottom">
+           &copy; Livefitfood.ca | Designed by Newman Law
+        </div>
+      </div>
+
+<!--<script src="js/modules.js">
+</script>-->
+
+
+
+   
+</body>
+</html>
+
+&nbsp;
+
+
 

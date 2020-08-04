@@ -11,43 +11,6 @@
     <title>{{{title}}}</title>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-
-    <script>
-            function makeAJAXRequest(method, url, data){ //data is optional, if we do add data will be a post or put method 
-                if(data){ // Make an AJAX call using the provided data & method
-                    console.log("Adding: "+data.name);
-                    fetch(url, { //fetch from the URL the method, body --> turns the object to a string of data that is a JSON, and header 
-                        method: method,
-                        body: JSON.stringify(data),
-                        headers: { 'Content-Type': 'application/json'} 
-                    })
-                    .then(response => response.json())
-                    .then(json => {//responds with number of items in cart 
-                        //changes the number beside the cart
-                        $("span.glyphicon").text(`${json.data}`); //since it only replied with numbers in our cart
-                    }).catch((err)=>{
-                        console.log("Error Fetching");
-                        alert(err.message);
-                    }); 
-
-                }else{  // Make an AJAX call without providing data using the method
-                    fetch(url, { method: method })
-                    .then(response => response.json())
-                    .then(json => {
-                        console.log(json);   
-                    }).catch((message)=>{
-                        alert(message);
-                    });
-                }
-            }
-            //makes ajax call to add a certain item by name to cart
-            function addToCart(data){
-                console.log("Calling add with: "+data);
-                 makeAJAXRequest("POST", "/addProduct", {name: data});
-            }
-
-        </script>    
-
     <style >
             img
             {
@@ -90,59 +53,35 @@
         </div>  
     </div>
 <!--THIS BODY IS WHAT WILL BE INPUTTED FOR OUR ORDRES-->
-
-
-        <div class="container">
-            <div class="row">
-            <div class="col-md-3">
-                <h2>Image</h2>
-            </div>
-            <div class="col-md-3">
-               <h2>Product</h2>
-            </div>
-            <div class="col-md-3">
-                <h2>Price</h2>
-            </div>
-            <div class="col-md-3">
-                <!-- Add the shopping cart glyphicon -->
-               <a href="/cart"><span class="glyphicon glyphicon-shopping-cart"></span></a> 
-            </div>
-        </div>
-        <hr>
+<div class="thefinalOrder">
+  <h1 class= "thefinalOrderH1">Order Summary</h1>
+  <h1 class= "thefinalOrderH1-2">Total: ${{Total}}</h1>
+</div>
+<div class="container">
         {{#each data}}
         <div class="row">
             <div class="col-md-3">
-                <img class="mptop2" src="/img/{{img}}" alt="{{name}}">
+                <h1>Product:</h1>
+                <h2>{{UniqueName}}</h2>
             </div>
             <div class="col-md-3">
-                <h1>{{name}}</h1>
-                <h2>Category: </h2>
-                <h3>{{category}}</h3>
-                <p>Description: {{desc}}</p>
-                <p>Quantity: {{Quantity}}</p>
-                {{#if topMeal}}
-                    <div>This is a topMeal</div>
-                {{else}}
-                    <div>This is not a topMeal</div>
-                {{/if}}
+                <h1>Quantity: {{Quantity}}</h1>
             </div>
             <div class="col-md-3">
-                <h1>${{price}}</h1>
-            </div>
-            <div class="col-md-3">
-                <!-- Creates add to cart button -->
-                <button  type="button" name="button" onclick='addToCart("{{name}}")'>Add to Cart</button>
+                <h1>Price: ${{Price}}</h1>
             </div>
         </div>
-        <hr>
+        <br>
         {{/each}}
-         <div class="col-md-3">
-            <a href="/cart"><button  type="button">Go to Cart</button></a></div>
+        <div class="row">
+            <div class="col-md-3">
+                <a href="/orders"><button  type="button">Continue Shopping</button></a></div>
+                <a href="/logout"><button  type="button">Logout</button></a></div>
+            </div>
         </div>
-        <Br>
-        </div>
-        
-
+</div>
+<br>
+<br>
 
 <!-- END OF ADDITION FOR BODY -->
     <div class="footer">
