@@ -35,8 +35,8 @@ let Users;
 module.exports.initialize = function(){ //all our connection is moved to our initialize function, moved here as it makes sure that the server
     //must connect first before connecting to DB
     return new Promise((resolve, reject)=>{
+        // let db = mongoose.createConnection("mongodb+srv://dbUser:Kingofkings123@senecaweb.zisxl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true });
         let db = mongoose.createConnection("mongodb+srv://dbUser:Kingofkings123@senecaweb.zisxl.mongodb.net/Web322NAA?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true });
-        
         db.on('error', (err)=>{
             reject(err);
         });

@@ -87,6 +87,7 @@ const product =
     
     getAllProducts()
     {
+        console.log("Testing getallProducts")
         let finalArray = [];
 
         for (let i=0; i < this.topMeals.length; i++)

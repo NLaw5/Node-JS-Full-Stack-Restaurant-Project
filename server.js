@@ -1,7 +1,7 @@
 //Newman Law
 //ID: 134543198
-//Github Link: 
-//Heroku Link: 
+//Github Link: https://github.com/NLaw5/WEB-322-Assignment-5.git 
+//Heroku Link: https://web-322-assignment5.herokuapp.com/ [Is working at the time of creation, please let me know if theres any error]
 //Data Clerk User Account: username: FM@seneca.ca passsword: #654321
 const express = require("express");
 const app = express();
@@ -75,18 +75,21 @@ db.initialize().then(()=>{
 
 app.get("/",(req,res)=>{
     db.getMealPackages().then((dataTopMealPackages)=>{
+            console.log("Testing getmealPackage for root")
+            console.log(dataTopMealPackages);
             res.render("home",{
                 title : "Home",
                 data : product.getAllProducts(), 
-                topMealPackages: db.checkMealProducts(dataTopMealPackages)
-            }).catch((err)=>{
-                res.render("home",{
-                title : "Home",
-                data : product.getAllProducts(),
-            }) 
+                topMealPackages: db.checkMealProducts(dataTopMealPackages) })
+            // }).catch((err)=>{
+            //     console.log(err)
+            //     res.render("home",{
+            //     title : "Home",
+            //     data : product.getAllProducts(),
+            // }) 
         });
     })
-})
+// })
 
 
 app.get("/listings",(req,res)=>{
